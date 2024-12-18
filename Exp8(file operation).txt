@@ -1,0 +1,182 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class Database 
+	{
+	public void addRecord() throws IOException
+	{
+		try
+			{
+			PrintWriter pr = new PrintWriter(new FileWriter("Student.txt",true));
+			String sname,sclass;
+			int rollno;
+			float marks;
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Enter roll no of student:");
+			rollno = sc.nextInt();
+			System.out.println("Enter name of student:");
+			sname = sc.next();
+			System.out.println("Enter class of student:");
+			sclass = sc.next();
+			System.out.println("Enter marks of student:");
+			marks=sc.nextFloat();
+			pr.println(rollno+"  "+sname+"  "+sclass+"  "+marks);
+			pr.close();
+			System.out.println("Record added.");
+			}
+		catch(Exception e)
+			{
+			System.out.println("Error in append "+e); 
+			}
+		}	
+	public void printRecords() throws IOException
+	{
+		String record;
+		FileReader fr = new FileReader("Student.txt");
+		BufferedReader br = new BufferedReader(fr);
+		do {
+			record = br.readLine();
+			if(record != null)
+				System.out.println(record);
+			}while(record!=null);
+		br.close();
+	}
+	public void searchRecord(String name) throws IOException,FileNotFoundException
+	{
+		String record;
+		String []fields;
+		boolean flag=false;
+		BufferedReader br = new BufferedReader(new FileReader("Student.txt"));
+		//BufferedReader br = new BufferReader(new FileReader("d:\\Student.txt"));
+		do {
+			record = br.readLine();
+			if(record != null)
+			{
+				fields = record.split("  ");
+				if(name.compareToIgnoreCase(fields[1])==0)
+				{
+					System.out.println("Record found");
+					System.out.println(record);
+					flag = true;
+					break;
+				}
+			}
+		}while(record != null);
+		if(flag==false)
+			System.out.println("Record not found");
+		br.close();
+	}
+	public void clearAllRecords() throws FileNotFoundException 
+	{
+		File f = new File("Student.txt");
+		PrintWriter pr = new PrintWriter(f);
+		pr.close();
+	}
+	public void modifyRecords(String name) throws IOException,FileNotFoundException
+	{
+		String record;
+		String []fields;
+		boolean flag=false;
+		String studentName,studentClass;
+		int rollNo;
+		float marks;
+		Scanner sc = new Scanner (System.in);
+		File f = new File("Student.txt");
+		File f1 = new File("Student.txt");
+		PrintWriter pr = new PrintWriter(f);
+		BufferedReader br = new BufferedReader(new FileReader(f1));
+		do {
+			record = br.readLine();
+			if(record != null)
+			{
+				fields = record.split("  ");
+				if (name.compareToIgnoreCase(fields[1])==0 && flag == false)
+				{
+					System.out.println("Enter roll no of student:");
+					rollNo = sc.nextInt();
+					System.out.println("Enter name of student:");
+					studentName = sc.next();
+					System.out.println("Enter class of student:");
+					studentClass = sc.next();
+					System.out.println("Enter marks of student:");
+					marks=sc.nextFloat();
+					pr.print(rollNo+"  "+studentName+"  "+studentClass+"  "+marks);	
+					System.out.println("Record updated successfully.");
+					flag = true;
+				}
+				else
+				{
+					pr.println(record);
+				}
+			}
+		}while (record != null);
+		if(flag == false)
+			System.out.println("Record not found");
+		br.close();
+		pr.close();
+		f1.delete();
+		f.renameTo(f1);
+	}
+}
+
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class TestDatabase {
+
+	public static void main(String[] args) throws IOException,FileNotFoundException
+	{
+		Database d=new Database();
+		int ch=0;
+		String name;
+		Scanner sc =new Scanner(System.in);
+		do
+		{
+			System.out.println("Enter");
+			System.out.println("1: for add record");
+			System.out.println("2: for search record");
+			System.out.println("3: for display record");
+			System.out.println("4: for modify record");
+			System.out.println("5: for clear record");
+			System.out.println("6: for terminate");
+			System.out.println("Entar your choice...");
+			ch =sc.nextInt();
+			switch(ch)
+			{
+			case 1:
+				d.addRecord();
+				break;
+			case 2: 
+				System.out.println("Enter name of Student to search:");
+				name=sc.next();
+				d.searchRecord(name);
+				break;
+			case 3:
+				d.printRecords();
+				break;
+			case 4: 
+				System.out.println("Enter name of Student to modify:");
+				name=sc.next();
+				d.modifyRecords(name);
+				break;
+			case 5:
+				d.clearAllRecords();
+				break;
+			case 6:
+				System.out.println("Terminiting the program");
+				break;
+				default :
+					System.out.println("Wrong choice..");					
+			}
+		}while(ch !=6);		
+	}
+}	
+

@@ -1,0 +1,119 @@
+
+public abstract class Shape 
+	{
+		private double b,h;
+		
+		public Shape()
+		{
+			b=h=0;
+		}
+		public Shape(double b,double h)
+		{
+			this.b=b;
+			this.h=h;
+		}
+		
+		public abstract double area();
+		
+		public double getH()
+		{
+			return h;
+		}
+		public double getB()
+		{
+			return b;
+		}
+		
+	}
+
+
+public class Triangle extends Shape
+	{
+		double a;
+		
+		public Triangle(double base,double height)
+		{
+			super(base,height);
+		}
+		
+		public double area()
+		{
+			a=(0.5*getH()*getB());
+			return a;
+		}
+	}	
+
+
+public class Rectangle extends Shape
+	{
+		double a;
+		
+		public Rectangle(double len,double bre)
+		{
+			super(len,bre);
+		}
+		
+		public double area()
+		{
+			a=(getH()*getB());
+			return a;
+		}
+	}
+
+import java.util.Scanner;
+
+public class TestShape 
+{
+
+	public static void main(String[] args) 
+		{
+			int x;
+			Shape s;
+			double a,b;
+			Scanner sc=new Scanner(System.in); 
+			do
+			{
+				
+				System.out.println("Menu.\n1.Triangle\n2.Rectangle\n3.Exit\nEnter your Choice : ");
+				x=sc.nextInt();
+
+				switch(x)
+				{
+				
+				case 1:
+					
+					System.out.println("Enter Base of the Triangle : ");
+					a=sc.nextDouble();
+					
+					System.out.println("Enter Height of the Triangle : ");
+					b=sc.nextDouble();
+					
+					s=new Triangle(a,b);
+					System.out.println("Area of Triangle : "+s.area());
+					break;
+					
+				case 2:
+				
+					System.out.println("Enter length of the Rectangle : ");
+					a=sc.nextDouble();
+					
+					System.out.println("Enter Breadth of the Rectangle : ");
+					b=sc.nextDouble();
+					
+					s=new Rectangle(a,b);
+					System.out.println("Area of Rectangle : "+s.area());
+					break;
+					
+				case 3:
+					
+					System.out.println("Program Closed. ");
+					System.exit(0);
+					
+				default:
+					
+					System.out.println("Invalid Choice. ");
+				}
+			}while(x!=3);
+		}
+
+}

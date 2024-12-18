@@ -1,0 +1,76 @@
+
+
+import java.util.Scanner;
+
+public class MyException 
+{
+
+	public static void main(String[] args) 
+	{
+		int a,b;
+		int n;
+		int index;
+		int x[]= {10,02,13};
+		Scanner sc=new Scanner(System.in);
+		
+		do
+		{
+			System.out.println("\nMenu"
+					+"\n1.Arithmetic Exception"
+					+"\n2.Array out of bound Exception"
+					+"\n3.Exit"+"\nEnter your Choice");
+			
+			n=sc.nextInt();
+			
+			switch(n)
+			{
+			case 1:
+			try
+			{
+				System.out.println("Enter Number 1 : ");
+				a=sc.nextInt();
+				
+				System.out.println("Enter Number 2 : ");
+				b=sc.nextInt();
+				
+				double c=a/b;
+				System.out.println("Division="+c);
+			}
+			catch(ArithmeticException e)
+			{
+				System.out.println("Divide by Zero Error. ");
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}
+			break;
+			
+			case 2:
+				try
+				{
+					System.out.println("Enter Array Index:");
+					index =sc.nextInt();
+					System.out.println("x["+index+"]="+x[index]);
+				}
+				catch(ArrayIndexOutOfBoundsException e)
+				{
+					System.out.println("Array index is out of bound ");
+				}
+				catch(Exception e)
+				{
+					System.out.println("Unknown Error. ");
+				}
+				break;
+				
+			case 3:
+				System.out.println("Program Closed. ");
+				System.exit(0);
+				
+			default:
+				System.out.println("Invalid Choice. ");
+			}
+		}while(true);
+	}
+
+}

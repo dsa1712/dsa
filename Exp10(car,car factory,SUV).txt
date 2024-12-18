@@ -1,0 +1,85 @@
+
+public interface Car 
+	{
+		public void buildCar();
+	}
+
+
+
+public class CarAssembler 
+	{
+		public void buildCar(Car carType)
+		{
+			carType.buildCar();
+		}
+	}
+
+public class CarFactory 
+	{
+	public Car getCar(String carType)
+	{
+		Car car=null;
+		CarAssembler assembler=new CarAssembler();
+		
+		if(carType.compareToIgnoreCase("Hatchback")==0)
+		{
+			car =new Hatchback();
+			assembler.buildCar(car);
+		}
+		
+		if(carType.compareToIgnoreCase("Sedan")==0)
+		{
+			car =new Sedan();
+			assembler.buildCar(car);
+		}
+		
+		if(carType.compareToIgnoreCase("SUV")==0)
+		{
+			car =new SUV();
+			assembler.buildCar(car);
+		}
+		return car;
+	}
+}
+
+
+
+public class Hatchback implements Car
+	{
+		public void buildCar()
+		{
+			System.out.println("Hatchback car build process complete.");
+		}
+	}
+
+
+public class Sedan implements Car
+	{
+		public void buildCar()
+		{
+			System.out.println("Sedan car build process complete.");
+		}
+	}
+
+
+public class SUV implements Car
+	{
+		public void buildCar()
+		{
+			System.out.println("SUV car build process complete.");
+		}
+	}
+
+
+public class TestFactory 
+{
+
+	public static void main(String[] args) 
+	{
+		CarFactory factory=new CarFactory();
+		SUV suv=(SUV)factory.getCar("SUV");
+		Sedan se=(Sedan)factory.getCar("Sedan");
+		Hatchback hb=(Hatchback)factory.getCar("Hatchback");
+	}
+
+}
