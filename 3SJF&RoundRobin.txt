@@ -1,0 +1,142 @@
+//Page replacement
+//SJF
+
+
+#include <stdio.h>
+#include <limits.h>
+
+int main() {
+    int n, i, time = 0, completed = 0, min_rt, idx;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int at[20], bt[20], rt[20], ct[20], tat[20], wt[20];
+    int gc[100], gpid[100], gcnt = 0;
+    float avgWT = 0, avgTAT = 0;
+
+    for (i = 0; i < n; i++) {
+        printf("Enter Arrival Time and Burst Time of P%d: ", i + 1);
+        scanf("%d %d", &at[i], &bt[i]);
+        rt[i] = bt[i];
+    }
+
+    while (completed < n) {
+        idx = -1;
+        min_rt = INT_MAX;
+
+        for (i = 0; i < n; i++) {
+            if (at[i] <= time && rt[i] > 0 && rt[i] < min_rt) {
+                min_rt = rt[i];
+                idx = i;
+            }
+        }
+
+        if (idx != -1) {
+            rt[idx]--;
+            time++;
+
+            gpid[gcnt] = idx + 1;
+            gc[gcnt] = time;
+            gcnt++;
+
+            if (rt[idx] == 0) {
+                completed++;
+                ct[idx] = time;
+                tat[idx] = ct[idx] - at[idx];
+                wt[idx] = tat[idx] - bt[idx];
+                avgTAT += tat[idx];
+                avgWT += wt[idx];
+            }
+        } else {
+            time++; // idle CPU
+        }
+    }
+
+    printf("\nSJF (Preemptive) Scheduling\n");
+    printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
+    for (i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n", i + 1, at[i], bt[i], ct[i], tat[i], wt[i]);
+    }
+
+    printf("\nAverage Turnaround Time = %.2f", avgTAT / n);
+    printf("\nAverage Waiting Time    = %.2f\n", avgWT / n);
+
+    printf("\nGantt Chart:\n0");
+    for (i = 0; i < gcnt; i++) {
+        printf(" --P%d-- %d", gpid[i], gc[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+
+//------------------------------------------------------------
+//Round Robin
+
+#include <stdio.h>
+
+int main() {
+    int n, tq, i, time = 0, completed = 0;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int at[20], bt[20], rt[20], ct[20], tat[20], wt[20];
+    int gc[100], gpid[100], gcnt = 0;
+    float avgWT = 0, avgTAT = 0;
+
+    for (i = 0; i < n; i++) {
+        printf("Enter Arrival Time and Burst Time of P%d: ", i + 1);
+        scanf("%d %d", &at[i], &bt[i]);
+        rt[i] = bt[i];
+    }
+
+    printf("Enter Time Quantum: ");
+    scanf("%d", &tq);
+
+    int done;
+    while (completed < n) {
+        done = 1;
+        for (i = 0; i < n; i++) {
+            if (rt[i] > 0 && at[i] <= time) {
+                done = 0;
+                if (rt[i] > tq) {
+                    time += tq;
+                    rt[i] -= tq;
+                } else {
+                    time += rt[i];
+                    rt[i] = 0;
+                    completed++;
+                    ct[i] = time;
+                    tat[i] = ct[i] - at[i];
+                    wt[i] = tat[i] - bt[i];
+                    avgTAT += tat[i];
+                    avgWT += wt[i];
+                }
+                gpid[gcnt] = i + 1;
+                gc[gcnt] = time;
+                gcnt++;
+            }
+        }
+        if (done == 1) break; // all finished
+    }
+
+    printf("\nRound Robin Scheduling (TQ=%d)\n", tq);
+    printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
+    for (i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n", i + 1, at[i], bt[i], ct[i], tat[i], wt[i]);
+    }
+
+    printf("\nAverage Turnaround Time = %.2f", avgTAT / n);
+    printf("\nAverage Waiting Time    = %.2f\n", avgWT / n);
+
+    printf("\nGantt Chart:\n0");
+    for (i = 0; i < gcnt; i++) {
+        printf(" --P%d-- %d", gpid[i], gc[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+
